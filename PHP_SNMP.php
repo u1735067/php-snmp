@@ -21,7 +21,7 @@ Licence : GNU GPLv3
  */
            
 class PHP_SNMP {
-    
+  
   /**
    * Main function to send SNMP v2c traps
    *
@@ -121,6 +121,7 @@ class PHP_SNMP {
     
   protected static function packVar($var, $type=null, $varInHex=false) 
   {  
+    // http://linux.die.net/man/1/snmptrap
     /**
 		 * @link http://en.wikipedia.org/wiki/Basic_encoding_rules
 		P/C is the primitive/constructed bit, it specifies if the value is primitive like an INTEGER or constructed which means, it again holds TLV values like a SET. If the bit is "on" (value = 1), it indicates a constructed value.
@@ -165,7 +166,7 @@ class PHP_SNMP {
 		Counter64 (available only in SNMPv2)	46
 		Uinteger32 (available only in SNMPv2)	47
     */
-    $type2hex   = array( 's'=>'04', 'i'=>'02', 'oid'=>'06', 'o'=>'43', 'c' => '41' );
+    $type2hex   = array( 's'=>'04', 'i'=>'02', 'oid'=>'06', 'o'=>'43', 'a' => '40', 'c' => '41' );
     
     if ($type[0] == 'x') {
       $typeHex = $type[1] . $type[2];
@@ -181,6 +182,7 @@ class PHP_SNMP {
     if ($type == 'c')   $varHex = ($varInHex) ? $var : self::dec2hex($var); 
     if ($type == 's')   $varHex = ($varInHex) ? $var : self::str2hex($var);
     if ($type == 'o')   $varHex = ($varInHex) ? $var : self::dec2hex($var);
+    if ($type == 'a')   $varHex = ($varInHex) ? $var : self::dec2hex(ip2long($var), 4); // IP represented as 4 bytes
     if ($type == 'x')   $varHex = ($varInHex) ? $var : $var; // if object, we pass hex data in $var
     if ($type == 'oid') $varHex = ($varInHex) ? $var : self::oid2hex($var);
     
@@ -241,10 +243,10 @@ class PHP_SNMP {
     return $oidHex;
   }
 
-  private static function dec2hex($n) 
+  private static function dec2hex($n, $minByte=1) 
   {
     $n = dechex($n);
-    if (strlen($n) & 1 == 1) $n = '0'.$n;
+    $n = str_pad($n, $minByte*2, '0', STR_PAD_LEFT);
     return $n;
   }
 
