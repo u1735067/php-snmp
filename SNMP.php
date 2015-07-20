@@ -46,7 +46,7 @@ class PHP_SNMP {
     $varBinds = array(array('oid', 'value', opt 'type'), [..]) // OID including count
   */
   protected static function prepareTrapPacket($varBinds, $community, $snmpTrapOID, $requestId=null) 
-	{     
+  {     
     $pSnmp['version']    = self::packVar(1); //pack('H*', '0201'.'01'); // version SNMP v2c
     $pSnmp['community']  = self::packVar($community);
     $pSnmp['type']       = pack('H*', 'a7'); // SNMPv2-Trap-PDU
@@ -75,7 +75,7 @@ class PHP_SNMP {
     
     $pSnmp['varBindsHeader']  = pack('H*', '30' . self::hexlen($pSnmp['varBinds'],1));
     
-    $pSnmp['body'] 		= $pSnmp['requestId']
+    $pSnmp['body']  = $pSnmp['requestId']
           . $pSnmp['errorStatus']
           . $pSnmp['errorIndex']
           . $pSnmp['varBindsHeader'] 
@@ -83,7 +83,7 @@ class PHP_SNMP {
     
     $pSnmp['bodyLen'] = pack('H*', self::hexlen($pSnmp['body'],1));
     
-    $snmpPack 	  = $pSnmp['version'] 
+    $snmpPack     = $pSnmp['version'] 
         . $pSnmp['community'] 
         . $pSnmp['type']
         . $pSnmp['bodyLen'] 
@@ -96,7 +96,7 @@ class PHP_SNMP {
   }
     
   protected static function packVarBinds($varBinds=null) 
-	{
+  {
     $varPack = array();
     if ($varBinds) foreach ($varBinds as $var) $varPack[] = self::packVarBind($var);
     return implode('', $varPack);
@@ -110,7 +110,7 @@ class PHP_SNMP {
       varBind = bindType + bindSize + oidType + oidSize + oid + valType + valSize + val
   */
   protected static function packVarBind($varBind) 
-	{
+  {
     $varHead = self::packVar($varBind['oid'], 'oid');
     $varBody = self::packVar($varBind['value'], $varBind['type']);
     $varHB   = $varHead . $varBody;
@@ -120,7 +120,7 @@ class PHP_SNMP {
   }
     
   protected static function packVar($var, $type=null, $varInHex=false) 
-	{  
+  {  
     /**
 		 * @link http://en.wikipedia.org/wiki/Basic_encoding_rules
 		P/C is the primitive/constructed bit, it specifies if the value is primitive like an INTEGER or constructed which means, it again holds TLV values like a SET. If the bit is "on" (value = 1), it indicates a constructed value.
@@ -164,7 +164,7 @@ class PHP_SNMP {
 		NsapAddress						45
 		Counter64 (available only in SNMPv2)	46
 		Uinteger32 (available only in SNMPv2)	47
-        */
+    */
     $type2hex   = array( 's'=>'04', 'i'=>'02', 'oid'=>'06', 'o'=>'43', 'c' => '41' );
     
     if ($type[0] == 'x') {
@@ -190,8 +190,8 @@ class PHP_SNMP {
     return $headPack . $bodyPack;
   }
     
-	protected static function hexlen($s, $showPrefix=false) 
-	{
+  protected static function hexlen($s, $showPrefix=false) 
+  {
     $len = strlen($s);
     $prefix = ($showPrefix) ? '81' : '';
     if ($len > 255)   $prefix = '82';
