@@ -51,7 +51,7 @@ class PHP_SNMP {
     $pSnmp['community']  = self::packVar($community);
     $pSnmp['type']       = pack('H*', 'a7'); // SNMPv2-Trap-PDU
     
-    $requestId = ($requestId) ? $requestId : rand(10000, 30000); // from 10000 to 40000 ?
+    $requestId = ($requestId) ? $requestId : rand(-214783648, 2147483647); // request-id INTEGER (-214783648..214783647)
     $pSnmp['requestId']  = self::packVar($requestId);
     
     $pSnmp['errorStatus']  = self::packVar(0);
