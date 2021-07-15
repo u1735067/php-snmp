@@ -1,7 +1,6 @@
 <?php
 /**
-Source : https://code.google.com/p/php-snmp/
-Fork   : https://github.com/Alex131089/php-snmp/
+Original source : https://code.google.com/p/php-snmp/
 Licence : GNU GPLv3
  * Class for sending SNMP V2c traps.
  *
