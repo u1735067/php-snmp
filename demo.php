@@ -1,7 +1,7 @@
 <?php
 /*
 * PHP-SNMP Demo file
-* @author: Alexandre `Alex131089` Levavasseur <alex131089@gmail.com>
+* @author: Alexandre Levavasseur
 */
 
 /*
